@@ -1,7 +1,10 @@
+import eventlet
+eventlet.monkey_patch()
+import eventlet.wsgi
+
 import os
 import base64
 import time
-import eventlet
 from flask import Flask, request, jsonify, send_from_directory,render_template
 from flask_socketio import SocketIO, emit
 from flask_mail import Mail, Message
@@ -238,9 +241,5 @@ def on_image_data(data):
                 print(f"[EMAIL ERROR] {e}")
 
 if __name__ == '__main__':
-    import eventlet
-    import eventlet.wsgi
-    eventlet.monkey_patch()
+    socketio.run(app, host='0.0.0.0', port=5000)
 
-    print("[SERVER] Running over HTTP (dev mode) on port 5000...")
-    eventlet.wsgi.server(eventlet.listen(('0.0.0.0', 5000)), app)
