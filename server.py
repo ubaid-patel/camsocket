@@ -12,18 +12,21 @@ from functools import wraps
 from datetime import datetime, timedelta
 from bson import ObjectId
 from flask_cors import CORS
+from dotenv import load_dotenv
+load_dotenv()
 
 
 # === Flask App Setup ===
 app = Flask(__name__)
 CORS(app) 
-app.config['SECRET_KEY'] = 'secretkeyhere'
-app.config['MONGO_URI'] = 'mongodb://localhost:27017/camDB'
-app.config['MAIL_SERVER'] = 'smtp.gmail.com'
-app.config['MAIL_PORT'] = 587
-app.config['MAIL_USE_TLS'] = True
-app.config['MAIL_USERNAME'] = 'fakeuser595@gmail.com'
-app.config['MAIL_PASSWORD'] = 'bruq wvqe yobw iwpe'
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
+app.config['MONGO_URI'] = os.environ.get('MONGO_URI')
+app.config['MAIL_SERVER'] = os.environ.get('MAIL_SERVER')
+app.config['MAIL_PORT'] = int(os.environ.get('MAIL_PORT', 587))
+app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS', 'True').lower() in ['true', '1']
+app.config['MAIL_USERNAME'] = os.environ.get('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.environ.get('MAIL_PASSWORD')
+
 
 mongo = PyMongo(app)
 mail = Mail(app)
